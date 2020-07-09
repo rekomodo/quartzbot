@@ -3,7 +3,7 @@ const discord = require("discord.js");
 const utility = require("./utility.js");
 const commands = require("./commands.js");
 
-function postContests(msg, args, client, boundTo) {
+function postContests(msg, args) {
     //TODO:
     //args with objects
     //error catching?
@@ -28,6 +28,7 @@ function postContests(msg, args, client, boundTo) {
                     const options = {
                         json: true,
                     };
+                    //change cf an at to use .then()
                     const cf = await rp(
                         "https://codeforces.com/api/contest.list?gym=false",
                         options

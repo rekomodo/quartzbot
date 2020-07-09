@@ -28,13 +28,6 @@ const quartzconfig = new PromiseDatabase({
     database: "quartzconfig",
 });
 
-const quartzeconomy = new PromiseDatabase({
-    host: "localhost",
-    user: "local",
-    password: "1234",
-    database: "quartzeconomy",
-});
-
 async function getGuildProperty(msg, property) {
     const id = msg.guild.id;
     const rowPacket = await quartzconfig.query(
@@ -45,5 +38,4 @@ async function getGuildProperty(msg, property) {
 
 exports.PromiseDatabase = PromiseDatabase;
 exports.quartzconfig = quartzconfig;
-exports.quartzeconomy = quartzeconomy;
 exports.getGuildProperty = getGuildProperty;

@@ -26,7 +26,7 @@ client.on("ready", () => {
     for (const id of guildIds) {
         checkServerConfig(id);
     }
-    commands.clock();
+    //commands.clock();
 });
 client.on("guildCreate", (guild) => checkServerConfig(guild.id));
 
