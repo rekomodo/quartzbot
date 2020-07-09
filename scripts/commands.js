@@ -1,12 +1,10 @@
-const fs = require("fs");
 const discord = require("discord.js");
 const config = require("../config.json");
 const cfat = require("./postcfat.js");
-const { exit, disconnect } = require("process");
+const { exit } = require("process");
 const promisedb = require("./promisedb.js");
 const { quartzconfig, getGuildProperty } = promisedb;
-
-var resources = ["kelp", "quartz", "prismarine", "enderine", "stardust"];
+const rpgCmd = require("./rpg.js");
 
 exports.commandfuncs = {
     say: (msg, args) => {
