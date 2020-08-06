@@ -28,22 +28,22 @@ function postContests(msg, args) {
                     const options = {
                         json: true,
                     };
-                    //change cf an at to use .then()
+                    //change cf and at to use .then()
                     const cf = await rp(
-                        "https://codeforces.com/api/contest.list?gym=false",
+                        "https://www.kontests.net/api/v1/codeforces",
                         options
                     );
                     const at = await rp(
-                        "https://atcoder-api.appspot.com/contests",
+                        "https://www.kontests.net/api/v1/at_coder",
                         options
                     );
                     var cfp = new Promise((resolve) => {
-                        var contestData = getUpcoming(cf.result, "name");
+                        var contestData = getUpcoming(cf);
                         embedContestData(contestData, contestEmbed);
                         resolve(null);
                     });
                     var atp = new Promise((resolve) => {
-                        var contestData = getUpcoming(at.reverse(), "id");
+                        var contestData = getUpcoming(at);
                         embedContestData(contestData, contestEmbed);
                         resolve(null);
                     });
@@ -59,46 +59,16 @@ function postContests(msg, args) {
         });
 }
 
-async function checkSoon(msg, args, client) {
-    const options = { json: true };
-    const cf = await rp(
-        "https://codeforces.com/api/contest.list?gym=false",
-        options
-    );
-    const at = await rp("https://atcoder-api.appspot.com/contests", options);
-    var contestData = getUpcoming(cf.result, "name");
-    contestAlert(contestData, client);
-    var contestData = getUpcoming(at.reverse(), "id");
-    contestAlert(contestData, client);
-}
-
-function contestAlert(contestData, client) {
-    for (var i = 0; i < contestData.length; i++) {
-        var time = contestData[i].secondsToStart;
-        const announceParams = [
-            "announce",
-            "contest",
-            "",
-            `${name} in ${Math.floor(time / 60)}m`,
-        ];
-        if (Math.floor(time / 60) <= 60) {
-            var name = contestData[i].name;
-            commands.announce(null, announceParams, client);
-        }
-    }
-}
-
-function getUpcoming(data, namePropertyName) {
+function getUpcoming(data) {
     //contest data from most recent to latest
     contests = [];
     for (var i = 0; i < data.length; i++) {
         var contest = data[i];
         var time = Math.floor(
-            contest.startTimeSeconds - new Date().getTime() / 1000
+            (Date.parse(contest.start_time) - new Date().getTime()) / 1000
         );
-        if (time <= 0) break;
         contests.push({
-            name: contest[namePropertyName],
+            name: contest.name,
             secondsToStart: time,
         });
     }
@@ -115,4 +85,3 @@ function embedContestData(contests, embed) {
 }
 
 exports.postContests = postContests;
-exports.checkSoon = checkSoon;
