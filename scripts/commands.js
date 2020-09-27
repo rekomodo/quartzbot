@@ -4,7 +4,12 @@ const cfat = require("./postcfat.js");
 const { exit } = require("process");
 const promisedb = require("./promisedb.js");
 const { quartzconfig, getGuildProperty } = promisedb;
-const rpgCmd = require("./rpg.js");
+
+var luigigifs = [
+    "https://tenor.com/view/luigi-dancing-gif-18057398",
+    "https://tenor.com/view/luigi-dance-dancing-game-super-mario-gif-16264053",
+    "https://tenor.com/view/luigi-dance-dancing-happy-excited-gif-17415825",
+];
 
 exports.commandfuncs = {
     say: (msg, args) => {
@@ -77,21 +82,16 @@ exports.commandfuncs = {
         }, args[1] * 60 * 1000);
         msg.channel.send(`Alert set to ${args[1]} minutes from now`);
     },
+    luigi: async (msg, args, client, times = -1) => {
+        if (args.length <= 2) return;
+        if (times == 0) return;
+        if (times == -1) times = args[2];
+        setTimeout(async () => {
+            msg.channel.send(luigigifs[Math.floor(Math.random() * 3)]);
+            exports.commandfuncs.luigi(msg, args, client, times - 1);
+        }, args[1] * 1000);
+    },
 };
-
-async function checkPlayerAccount(msg) {
-    await quartzeconomy
-        .query(
-            `SELECT COUNT(1) FROM playerresources WHERE playerId = ${msg.author.id}`
-        )
-        .then((count) => {
-            if (count[0]["COUNT(1)"] == 0) {
-                quartzeconomy.query(
-                    `INSERT INTO playerresources(playerId) VALUES(${msg.author.id})`
-                );
-            }
-        });
-}
 
 async function getBoundChannel(msg, client) {
     const boundId = await getGuildProperty(msg, "boundTo");
