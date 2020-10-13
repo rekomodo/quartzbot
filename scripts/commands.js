@@ -56,14 +56,12 @@ exports.commandfuncs = {
     },
     kill: (msg, args, client) => {
         if (msg.author.id == config.owner) {
-            msg.channel
-                .send("**why master? why must I suffer so...**")
-                .then(() => {
-                    client.destroy();
-                    quartzconfig.close();
-                    quartzeconomy.close();
-                    exit();
-                });
+            msg.channel.send("**pq me mata :((**").then(() => {
+                client.destroy();
+                quartzconfig.close();
+                quartzeconomy.close();
+                exit();
+            });
         }
     },
     alert: async (msg, args, client) => {
