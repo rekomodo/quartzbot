@@ -11,10 +11,10 @@ var silenceArthur = false;
 
 function checkServerConfig(guildId) {
     quartzconfig
-        .query(`SELECT COUNT(1) FROM config WHERE guildId = ${guildId}`)
+        .get(`SELECT COUNT(1) FROM config WHERE guildId = ${guildId}`)
         .then((count) => {
             if (count[0]["COUNT(1)"] == 0) {
-                quartzconfig.query(
+                quartzconfig.run(
                     `INSERT INTO config(guildId) VALUES(${guildId})`
                 );
             }

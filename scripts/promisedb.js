@@ -1,36 +1,31 @@
-const mysql = require("mysql");
+const sqlite = require("better-sqlite3");
 class PromiseDatabase {
-    constructor(config) {
-        this.connection = mysql.createConnection(config);
+    constructor(dbname) {
+        this.database = new sqlite(dbname);
     }
-    query(sql, args) {
+    get(sql) {
         return new Promise((resolve, reject) => {
-            this.connection.query(sql, args, (err, rows) => {
-                if (err) return reject(err);
-                resolve(rows);
-            });
+            const statement = this.database.prepare(sql);
+            resolve(statement.all());
+        });
+    }
+    run(sql) {
+        return new Promise((resolve, reject) => {
+            const statement = this.database.prepare(sql);
+            statement.run();
+            resolve();
         });
     }
     close() {
-        return new Promise((resolve, reject) => {
-            this.connection.end((err) => {
-                if (err) return reject(err);
-                resolve();
-            });
-        });
+        this.database.close();
     }
 }
 
-const quartzconfig = new PromiseDatabase({
-    host: "localhost",
-    user: "local",
-    password: "1234",
-    database: "quartzconfig",
-});
+const quartzconfig = new PromiseDatabase("quartz.db");
 
 async function getGuildProperty(msg, property) {
     const id = msg.guild.id;
-    const rowPacket = await quartzconfig.query(
+    const rowPacket = await quartzconfig.get(
         `SELECT ${property} FROM config WHERE guildId = ${id}`
     );
     return rowPacket[0][property];

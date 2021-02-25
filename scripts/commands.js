@@ -5,12 +5,6 @@ const { exit } = require("process");
 const promisedb = require("./promisedb.js");
 const { quartzconfig, getGuildProperty } = promisedb;
 
-var luigigifs = [
-    "https://tenor.com/view/luigi-dancing-gif-18057398",
-    "https://tenor.com/view/luigi-dance-dancing-game-super-mario-gif-16264053",
-    "https://tenor.com/view/luigi-dance-dancing-happy-excited-gif-17415825",
-];
-
 exports.commandfuncs = {
     say: (msg, args) => {
         msg.channel.send(args.slice(1).join(" "));
@@ -27,7 +21,7 @@ exports.commandfuncs = {
     },
     bind: async (msg, args, client) => {
         if (args[1] == "contestRole") {
-            quartzconfig.query(
+            quartzconfig.run(
                 `UPDATE config 
                 SET contestRole = ${msg.mentions.roles.first().id} 
                 WHERE guildId = ${msg.guild.id}`
@@ -38,14 +32,14 @@ exports.commandfuncs = {
         } else {
             boundChannel = await getBoundChannel(msg, client);
             if (boundChannel == msg.channel) {
-                await quartzconfig.query(
+                await quartzconfig.run(
                     `UPDATE config 
                     SET boundTo = NULL 
                     WHERE guildId = ${msg.guild.id}`
                 );
                 msg.channel.send(`Unbound from ${msg.channel}`);
             } else {
-                await quartzconfig.query(
+                await quartzconfig.run(
                     `UPDATE config 
                     SET boundTo = ${msg.channel.id} 
                     WHERE guildId = ${msg.guild.id}`
@@ -59,7 +53,6 @@ exports.commandfuncs = {
             msg.channel.send("**pq me mata :((**").then(() => {
                 client.destroy();
                 quartzconfig.close();
-                quartzeconomy.close();
                 exit();
             });
         }
@@ -79,15 +72,6 @@ exports.commandfuncs = {
             ]);
         }, args[1] * 60 * 1000);
         msg.channel.send(`Alert set to ${args[1]} minutes from now`);
-    },
-    luigi: async (msg, args, client, times = -1) => {
-        if (args.length <= 2) return;
-        if (times == 0) return;
-        if (times == -1) times = args[2];
-        setTimeout(async () => {
-            msg.channel.send(luigigifs[Math.floor(Math.random() * 3)]);
-            exports.commandfuncs.luigi(msg, args, client, times - 1);
-        }, args[1] * 1000);
     },
 };
 
