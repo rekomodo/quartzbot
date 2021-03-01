@@ -61,6 +61,7 @@ client.on("message", async (msg) => {
 
     if (msg.content == prefix + "silence") {
         silenceArthur = !silenceArthur;
+        msg.react("👍").catch(console.error);
         return;
     }
 
