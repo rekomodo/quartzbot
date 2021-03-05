@@ -54,6 +54,11 @@ client.on("message", async (msg) => {
         return;
     }
 
+    if (msg.content == "ok") {
+        msg.react("🥶").catch(console.error);
+        return;
+    }
+
     const prefix = await getGuildProperty(msg, "prefix");
     if (msg.content.substring(0, prefix.length) != prefix) {
         return;
@@ -62,11 +67,6 @@ client.on("message", async (msg) => {
     if (msg.content == prefix + "silence") {
         silenceArthur = !silenceArthur;
         msg.react("👍").catch(console.error);
-        return;
-    }
-
-    if (msg.content == "ok") {
-        msg.react("🥶").catch(console.error);
         return;
     }
 
