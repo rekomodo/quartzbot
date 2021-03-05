@@ -10,20 +10,13 @@ exports.commandfuncs = {
         msg.channel.send(args.slice(1).join(" "));
     },
     contests: (msg, args, client) => {
-        switch (args[1]) {
-            case "soon":
-                cfat.checkSoon(msg, args, client);
-                break;
-            default:
-                cfat.postContests(msg, args);
-                break;
-        }
+        cfat.postContests(msg, args);
     },
     bind: async (msg, args, client) => {
         if (args[1] == "contestRole") {
             quartzconfig.run(
                 `UPDATE config 
-                SET contestRole = ${msg.mentions.roles.first().id} 
+                SET contestRole = '${msg.mentions.roles.first().id}'
                 WHERE guildId = ${msg.guild.id}`
             );
             msg.channel.send(
@@ -73,6 +66,16 @@ exports.commandfuncs = {
         }, args[1] * 60 * 1000);
         msg.channel.send(`Alert set to ${args[1]} minutes from now`);
     },
+    vielne: async (msg, args, client) => {
+        msg.channel.send(
+            "https://tenor.com/view/dragon-ball-dragon-super-goku-power-gif-9067607"
+        );
+    },
+    prefix: async (msg, args, client) => {
+        quartzconfig.run(`
+            UPDATE config SET prefix = '${args[1]}' WHERE guildId = ${msg.guild.id}
+        `);
+    },
 };
 
 async function getBoundChannel(msg, client) {
@@ -120,4 +123,44 @@ async function announce(msg, args, client) {
     channel.send(`${pingString} ${msgBody}`);
 }
 
+function respondWord(msg, word, response) {
+    if (msg.content == word) {
+        msg.channel.send(response).catch(console.error);
+    }
+}
+
+function reactWord(msg, word, reactions) {
+    if (msg.content == word) {
+        for (var j = 0; j < reactions.length; j++) {
+            msg.react(reactions[j]).catch(console.error);
+        }
+    }
+}
+
+function respondContainsWord(msg, word, response) {
+    var splitmsg = msg.content.split(" ");
+    for (var i = 0; i < splitmsg.length; i++) {
+        if (splitmsg[i].toLowerCase() == word) {
+            msg.channel.send(response).catch(console.error);
+            break;
+        }
+    }
+}
+
+function reactContainsWord(msg, word, reactions) {
+    var splitmsg = msg.content.split(" ");
+    for (var i = 0; i < splitmsg.length; i++) {
+        if (splitmsg[i].toLowerCase() == word) {
+            for (var j = 0; j < reactions.length; j++) {
+                msg.react(reactions[j]).catch(console.error);
+            }
+            break;
+        }
+    }
+}
+
+exports.reactContainsWord = reactContainsWord;
+exports.respondContainsWord = respondContainsWord;
+exports.reactWord = reactWord;
+exports.respondWord = respondWord;
 exports.announce = announce;

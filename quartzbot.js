@@ -35,17 +35,7 @@ client.on("guildCreate", (guild) => checkServerConfig(guild.id));
 client.on("message", async (msg) => {
     if (msg.content == "thanks quartz") {
         msg.react("👍").catch(console.error);
-    }
-    var splitmsg = msg.content.split(" ");
-    for (var i = 0; i < splitmsg.length; i++) {
-        if (splitmsg[i].toLowerCase() == "kevin") {
-            msg.channel.send("hehe kevin-bolo");
-            break;
-        }
-        if (splitmsg[i].toLowerCase() == "kebin") {
-            msg.channel.send("bin");
-            break;
-        }
+        return;
     }
 
     //if author is arthur
@@ -54,9 +44,14 @@ client.on("message", async (msg) => {
         return;
     }
 
-    if (msg.content == "ok") {
-        msg.react("🥶").catch(console.error);
-        return;
+    commands.respondWord(msg, "mamamela", "*se la mama*");
+    commands.reactWord(msg, "ok", ["🥶"]);
+    commands.reactWord(msg, "ya", ["🥶"]);
+    commands.reactWord(msg, "thanks quartz", ["👍"]);
+    commands.respondContainsWord(msg, "kebin", "bin");
+
+    if (msg.author.id == "364220458666688514") {
+        commands.reactContainsWord(msg, "apex", ["🧢", "👻"]);
     }
 
     const prefix = await getGuildProperty(msg, "prefix");
