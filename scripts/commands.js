@@ -124,13 +124,13 @@ async function announce(msg, args, client) {
 }
 
 function respondWord(msg, word, response) {
-    if (msg.content == word) {
+    if (msg.content.toLowerCase() == word) {
         msg.channel.send(response).catch(console.error);
     }
 }
 
 function reactWord(msg, word, reactions) {
-    if (msg.content == word) {
+    if (msg.content.toLowerCase() == word) {
         for (var j = 0; j < reactions.length; j++) {
             msg.react(reactions[j]).catch(console.error);
         }
