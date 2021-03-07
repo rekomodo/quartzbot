@@ -45,6 +45,11 @@ client.on("message", async (msg) => {
     }
 
     commands.respondWord(msg, "mamamela", "*se la mama*");
+    commands.respondWord(
+        msg,
+        "apex?",
+        "https://media.discordapp.net/attachments/777723763038617601/806284824025104384/unknown.gif"
+    );
     commands.reactWord(msg, "ok", ["🥶"]);
     commands.reactWord(msg, "ya", ["🥶"]);
     commands.reactWord(msg, "thanks quartz", ["👍"]);
