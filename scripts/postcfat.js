@@ -16,7 +16,7 @@ function postContests(msg, args) {
 
     var contestEmbed = new discord.MessageEmbed()
         .setTitle("Upcoming Contests")
-        .setDescription("Codeforces and Atcoder")
+        .setDescription("Codeforces, Atcoder, Codechef")
         .setColor("#0099ff");
 
     msg.channel
@@ -37,6 +37,10 @@ function postContests(msg, args) {
                         "https://www.kontests.net/api/v1/at_coder",
                         options
                     );
+                    const chef = await rp(
+                        "https://www.kontests.net/api/v1/code_chef",
+                        options
+                    );
                     var cfp = new Promise((resolve) => {
                         var contestData = getUpcoming(cf);
                         embedContestData(contestData, contestEmbed);
@@ -47,7 +51,12 @@ function postContests(msg, args) {
                         embedContestData(contestData, contestEmbed);
                         resolve(null);
                     });
-                    Promise.all([cfp, atp]).then(() => {
+                    var chefp = new Promise((resolve) => {
+                        var contestData = getUpcoming(chef);
+                        embedContestData(contestData, contestEmbed);
+                        resolve(null);
+                    });
+                    Promise.all([cfp, atp, chefp]).then(() => {
                         embedMsg.edit(contestEmbed);
                         newMsg.delete();
                     });
@@ -67,6 +76,7 @@ function getUpcoming(data) {
         var time = Math.floor(
             (Date.parse(contest.start_time) - new Date().getTime()) / 1000
         );
+        if (time < 0) continue;
         contests.push({
             name: contest.name,
             secondsToStart: time,
