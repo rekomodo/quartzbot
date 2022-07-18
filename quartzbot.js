@@ -5,6 +5,9 @@ const { commandfuncs } = commands;
 const promisedb = require("./scripts/promisedb.js");
 const { quartzconfig, getGuildProperty } = promisedb;
 
+let lastHour = 0;
+let timer = new Date();
+
 const client = new discord.Client();
 
 var silenceArthur = false;
@@ -44,11 +47,27 @@ client.on("message", async (msg) => {
         return;
     }
 
+    //every hour
+    let curHour = timer.getTime() / 3600000;
+    if (curHour > lastHour) {
+        msg.channel.send("beban agua chicos");
+        lastHour = curHour;
+    }
     commands.respondWord(msg, "mamamela", "*se la mama*");
     commands.respondWord(
         msg,
         "apex?",
         "https://media.discordapp.net/attachments/777723763038617601/806284824025104384/unknown.gif"
+    );
+    commands.respondWord(
+        msg,
+        "dame el prefix",
+        await getGuildProperty(msg, "prefix")
+    );
+    commands.respondWord(
+        msg,
+        "val?",
+        "https://media.giphy.com/media/Tk2JqhQD4QldUZ5feG/giphy.gif"
     );
     commands.reactWord(msg, "ok", ["🥶"]);
     commands.reactWord(msg, "ya", ["🥶"]);
