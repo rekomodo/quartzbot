@@ -23,8 +23,8 @@ class PromiseDatabase {
 
 const quartzconfig = new PromiseDatabase("quartz.db");
 
-async function getGuildProperty(msg, property) {
-    const id = msg.guild.id;
+async function getGuildProperty(msg, property, msgIsGID = false) {
+    const id = msgIsGID ? msg : msg.guild.id;
     const rowPacket = await quartzconfig.get(
         `SELECT ${property} FROM config WHERE guildId = ${id}`
     );

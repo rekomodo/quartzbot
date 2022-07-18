@@ -6,6 +6,9 @@ const promisedb = require("./promisedb.js");
 const { randomInt } = require("crypto");
 const { quartzconfig, getGuildProperty } = promisedb;
 
+//add per-server water timer
+const waterTime = 60; // in minutes
+
 exports.commandfuncs = {
     say: (msg, args) => {
         msg.channel.send(args.slice(1).join(" "));
@@ -67,6 +70,16 @@ exports.commandfuncs = {
         }, args[1] * 60 * 1000);
         msg.channel.send(`Alert set to ${args[1]} minutes from now`);
     },
+    water: async (guildId, client) => {
+        var boundChannel = await getBoundChannel(guildId, client, true);
+        if (boundChannel == null) {
+            return;
+        }
+        boundChannel.send(`Drink water guysh`);
+        setTimeout(() => {
+            exports.commandfuncs.water(guildId, client);
+        }, waterTime * 60 * 1000);
+    },
     vielne: async (msg, args, client) => {
         msg.channel.send(
             "https://tenor.com/view/dragon-ball-dragon-super-goku-power-gif-9067607"
@@ -82,8 +95,8 @@ exports.commandfuncs = {
     },
 };
 
-async function getBoundChannel(msg, client) {
-    const boundId = await getGuildProperty(msg, "boundTo");
+async function getBoundChannel(msg, client, msgIsGID = false) {
+    const boundId = await getGuildProperty(msg, "boundTo", msgIsGID);
     var boundChannel;
     if (boundId == null) boundChannel = null;
     else boundChannel = await client.channels.fetch(boundId);

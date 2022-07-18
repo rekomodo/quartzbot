@@ -5,9 +5,6 @@ const { commandfuncs } = commands;
 const promisedb = require("./scripts/promisedb.js");
 const { quartzconfig, getGuildProperty } = promisedb;
 
-let lastHour = 0;
-let timer = new Date();
-
 const client = new discord.Client();
 
 var silenceArthur = false;
@@ -30,6 +27,7 @@ client.on("ready", () => {
     const guildIds = client.guilds.cache.keys();
     for (const id of guildIds) {
         checkServerConfig(id);
+        commandfuncs.water(id, client);
     }
     //commands.clock();
 });
@@ -47,12 +45,6 @@ client.on("message", async (msg) => {
         return;
     }
 
-    //every hour
-    let curHour = timer.getTime() / 3600000;
-    if (curHour > lastHour) {
-        msg.channel.send("beban agua chicos");
-        lastHour = curHour;
-    }
     commands.respondWord(msg, "mamamela", "*se la mama*");
     commands.respondWord(
         msg,
