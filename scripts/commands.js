@@ -3,6 +3,7 @@ const config = require("../config.json");
 const cfat = require("./postcfat.js");
 const { exit } = require("process");
 const promisedb = require("./promisedb.js");
+const { randomInt } = require("crypto");
 const { quartzconfig, getGuildProperty } = promisedb;
 
 exports.commandfuncs = {
@@ -75,6 +76,9 @@ exports.commandfuncs = {
         quartzconfig.run(`
             UPDATE config SET prefix = '${args[1]}' WHERE guildId = ${msg.guild.id}
         `);
+    },
+    roll: async (msg, args, client) => {
+        msg.channel.send(Math.floor(Math.random() * parseInt(args[1])) + 1);
     },
 };
 
