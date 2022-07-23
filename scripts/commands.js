@@ -70,16 +70,6 @@ exports.commandfuncs = {
         }, args[1] * 60 * 1000);
         msg.channel.send(`Alert set to ${args[1]} minutes from now`);
     },
-    water: async (guildId, client) => {
-        var boundChannel = await getBoundChannel(guildId, client, true);
-        if (boundChannel == null) {
-            return;
-        }
-        boundChannel.send(`Drink water guysh`);
-        setTimeout(() => {
-            exports.commandfuncs.water(guildId, client);
-        }, waterTime * 60 * 1000);
-    },
     vielne: async (msg, args, client) => {
         msg.channel.send(
             "https://tenor.com/view/dragon-ball-dragon-super-goku-power-gif-9067607"
@@ -101,6 +91,17 @@ async function getBoundChannel(msg, client, msgIsGID = false) {
     if (boundId == null) boundChannel = null;
     else boundChannel = await client.channels.fetch(boundId);
     return boundChannel;
+}
+
+async function water(guildId, client) {
+    var boundChannel = await getBoundChannel(guildId, client, true);
+    if (boundChannel == null) {
+        return;
+    }
+    boundChannel.send(`Drink water guysh`);
+    setTimeout(() => {
+        water(guildId, client);
+    }, waterTime * 60 * 1000);
 }
 
 async function announce(msg, args, client) {
@@ -181,3 +182,4 @@ exports.respondContainsWord = respondContainsWord;
 exports.reactWord = reactWord;
 exports.respondWord = respondWord;
 exports.announce = announce;
+exports.water = water;
