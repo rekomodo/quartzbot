@@ -27,7 +27,7 @@ client.on("ready", () => {
     const guildIds = client.guilds.cache.keys();
     for (const id of guildIds) {
         checkServerConfig(id);
-        water(id, client);
+        commands.water(id, client);
     }
     //commands.clock();
 });
